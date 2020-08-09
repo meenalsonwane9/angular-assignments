@@ -25,15 +25,15 @@ fxLayoutGap.xs="0">
             <button mat-button [routerLink]="['/dishdetail', prev]"><span class="fa fa-chevron-left fa-lg"></span></button>
             <button mat-button (click)="goBack()">Back</button>
             <button mat-button>LIKE</button>
-            <!-- <button mat-button>SHARE</button> -->
-            <!-- <span class="flex-spacer"></span> -->
+            <button mat-button>SHARE</button>
+            <span class="flex-spacer"></span>
         <button mat-button [routerLink]="['/dishdetail', next]"><span class="fa fa-chevron-right fa-lg"></span></button>
           </mat-card-actions>
         </mat-card>
      
     </div>
   
-      <div fxFlex="40" >
+      <div fxFlex class="form-size" fxFlexOffset="80px">
         <mat-list *ngIf="dish">
           <h3>Comments</h3>
          
@@ -45,10 +45,46 @@ fxLayoutGap.xs="0">
             </p>
           </mat-list-item>
         </mat-list>
+        <mat-list>
+        <mat-list-item *ngIf="feedbackForm.valid">
       
+          <p matLine>{{feedbackForm.value.message}}</p>
+          <p matLine>{{feedbackForm.value.rating}} Stars</p>
+          <p matLine>-- {{feedbackForm.value.firstname}}  </p>
+  
+      </mat-list-item>
+    </mat-list>
+        <!-- <p>{{ feedbackForm.value | json }} {{ feedbackForm.status | json }}</p> -->
+        
+
+    <form novalidate [formGroup]="feedbackForm" #fform="ngForm" (ngSubmit)="onSubmit()">
+      <p>
+        <mat-form-field class="full-width">
+          <input matInput formControlName="firstname" placeholder="Name" type="text" required>
+          <mat-error *ngIf="formErrors.firstname">{{formErrors.firstname}}</mat-error>
+        </mat-form-field>
+       
+      </p>
+      
+      <mat-slider formControlName="rating"
+      thumbLabel
+      [displayWith]="formatLabel"
+      tickInterval="1"
+      min="1"
+      max="5"></mat-slider>
+      <p>
+        <mat-form-field class="full-width">
+          <textarea matInput formControlName="message" placeholder="Your Comment" rows=5 required></textarea>
+          <mat-error *ngIf="formErrors.message">{{formErrors.message}}</mat-error>
+        </mat-form-field>
+      </p>
+      <button type="submit" mat-button class="background-primary text-floral-white"  [disabled]="!feedbackForm.valid">Submit</button>
+    </form>
+  
       <div [hidden]="dish">
         <mat-spinner></mat-spinner><h4>Loading . . . Please Wait</h4>
       </div>
     </div>
+    
 </div>
 
